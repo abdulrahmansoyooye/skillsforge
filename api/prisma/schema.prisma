@@ -1,0 +1,57 @@
+generator client{
+    provider = "prisma-client"
+    output = "../generated"
+}
+
+
+datasource db{
+    provider = "postgresql"
+}
+enum PaymentMethod{
+    CARD
+    CASH
+    TRANSFER
+    OTHER
+}
+model User{
+    id String @id @default(uuid())
+    email String @unique
+    passwordHash String
+    createdAt DateTime @default(now())
+    categories Category[]
+    expenses Expense[]
+    budgets Budget[]
+}
+
+model Category{
+    id String @id @default(uuid())
+    name String 
+    userId String
+    user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+    expenses Expense[]
+    @@unique([userId,name])
+}
+model Expense{
+    id String @id @default(uuid())
+    title String 
+    amount Decimal @db.Decimal(12,2) 
+    date DateTime
+    paymentMethod PaymentMethod
+    categoryId String?
+    userId String
+
+    user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+    category Category? @relation(fields:[categoryId],references:[id],onDelete: SetNull)
+    createdAt DateTime @default(now())
+    @@index([userId,date])
+}
+
+model Budget{
+    id String @id @default(uuid())
+    month String 
+    limit Decimal @db.Decimal(12,2) 
+    userId String
+    user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+    
+    @@unique([userId,month])
+}
