@@ -1,1 +1,26 @@
-node_modules
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Dependency directories (Never commit these)
+node_modules/
+jspm_packages/
+env/
+venv/
+ENV/
+
+# OS-specific system files
+.DS_Store
+Thumbs.db
+
+# IDE and Code Editors configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+
+# Sensitive data / Secrets (API keys, credentials)
+.env
+.env.local
+config/secure.json

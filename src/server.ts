@@ -1,6 +1,6 @@
+import "dotenv/config";
 import { app } from "./app.js";
 import { prisma } from "./config/prisma.js";
-import "dotenv/config"
 
 const port = Number(process.env.PORT ?? 4000);
 async function start() {
@@ -12,6 +12,8 @@ try {
 
 } catch (error) {
     console.error(`[db] connection failed to ${hostname}:${dbPort}`,error)
+    process.exit(1);
+
 }
   const server = app.listen(port,()=>console.log(`[http] listening on ${port}`))
     const shutdown = async (signal:string)=>{
