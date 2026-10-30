@@ -1,3 +1,4 @@
+import type { lte } from "zod";
 import { prisma } from "../../config/prisma.js";
 import { HttpError } from "../../utils/httpError.js";
 import * as categories from "../categories/categories.service.js";
@@ -7,7 +8,7 @@ type ExpenseInput = {
   amount: number;
   date: Date;
   paymentMethod: "CASH" | "CARD" | "TRANSFER" | "OTHER";
-  categoryId?: string | null | undefined;
+  categoryId?: string | null ;
 };
 export async function summary(userId: string) {
   const where = {
@@ -35,7 +36,7 @@ export async function list(userId: string, q: listExpensesQuery) {
     ...((q.from || q.to) && {
       date: {
         ...(q.from && { gte: q.from }),
-        ...(q.to && { gte: q.to }),
+        ...(q.to && { lte: q.to }),
       },
     }),
   };
@@ -69,19 +70,21 @@ export async function getOwned(userId: string, id: string) {
   return expense;
 }
 
+
 export async function create(userId: string, data: ExpenseInput) {
   if (data.categoryId) await categories.getOwned(userId, data.categoryId);
   return prisma.expense.create({ data: { ...data, userId } });
 }
 
-export async function update(userId: string, data: ExpenseInput, id: string) {
+export async function update(userId: string, data: Partial<ExpenseInput>, id: string) {
   await getOwned(userId, id);
   if (data.categoryId) await categories.getOwned(userId, data.categoryId);
   return prisma.expense.update({ where: { id }, data });
 }
 
+
 export async function remove(userId: string, id: string) {
   await getOwned(userId, id);
 
-  return prisma.expense.remove({ where: { userId } });
+  return prisma.expense.delete({ where: { id } });
 }

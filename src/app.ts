@@ -11,10 +11,13 @@ import morgan from 'morgan'
 import { errorHanlder } from "./middleware/errorHandler.js";
 app.use(cors());
 app.use(express.json());
-
+const specPath = path.join(process.cwd(),"src/docs/openapi.yml")
 const spec = YAML.parse(
-    fs.readFileSync(path.join(process.cwd(),'src/docs/openapi.yml'),"utf-8"
-))
+   fs.readFileSync( specPath,"utf-8")
+)
+if(!spec || typeof spec !== 'object' ||!spec.openapi){
+    throw new Error(`Invalid OpenApi spec at ${specPath}: file is empty or missinf the "openapi" key`)
+}
 app.use("/api",swaggerUi.serve,swaggerUi.setup(spec))
 
 app.get("/health",(_req,res)=>res.json({status:"ok"}));

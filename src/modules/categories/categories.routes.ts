@@ -1,8 +1,8 @@
 import { Router } from "express"
-import { requireAuth } from "../../middleware/auth.js"
 import { categoryScehma } from "./categories.schema.js"
 import * as service from "./categories.service.js"
 import { idParamScehma } from "../../utils/util.js"
+import { requireAuth } from "../../middleware/auth.js"
 export const categoriesRouter = Router()
 
 categoriesRouter.use(requireAuth)

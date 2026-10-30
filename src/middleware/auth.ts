@@ -10,7 +10,7 @@ declare global{
     }
 }
 
-export const requireAuth = (req:Request,_res:Response,next:NextFunction)=>{
+export const requireAuth:RequestHandler = (req,_res,next)=>{
     const header = req.headers.authorization
     if(!header?.startsWith("Bearer ")) throw new HttpError(401,'Malformed Token')
     try{

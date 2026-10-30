@@ -11,7 +11,7 @@ try {
     console.log(`[db] connected to ${hostname}:${dbPort}${pathname} in ${Date.now() - tO} ms`)
 
 } catch (error) {
-    console.error(`[db] connection failed to ${hostname}:${dbPort}`)
+    console.error(`[db] connection failed to ${hostname}:${dbPort}`,error)
 }
   const server = app.listen(port,()=>console.log(`[http] listening on ${port}`))
     const shutdown = async (signal:string)=>{
