@@ -8,8 +8,9 @@ export async function register (email:string,password:string){
   try {
     const user = await prisma.user.create({data:{email,passwordHash}})
     return {id:user.id, email:user.email};
-  } catch (error:any) {
+  } catch (error:) {
     if(error.code === "P2002") throw new HttpError(409,'Email already registered')
+    throw error
   }
 }
 
