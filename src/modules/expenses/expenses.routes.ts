@@ -11,6 +11,10 @@ expensesRouter.get("/",async (req,res) => {
     const query = listExpensesSchema.parse(req.query)
     res.status(200).json(await service.list(req.user!.id,query))
 })
+expensesRouter.get("/summary",async (req,res) => {
+    const month = (req.body)
+    res.status(200).json(await service.summary(req.user!.id,month))
+})
 expensesRouter.get("/:id",async (req,res) => {
     const {id} = idParamScehma.parse(req.params)
     res.status(200).json(await service.getOwned(req.user!.id,id))
@@ -21,15 +25,15 @@ expensesRouter.post("/",async (req,res) => {
 })
 
 
-expensesRouter.patch("/",async (req,res) => {
+expensesRouter.patch("/:id",async (req,res) => {
     const {id} = idParamScehma.parse(req.params)
     const data = createExpenseSchema.parse(req.body)
     res.status(200).json(await service.update(req.user!.id,data,id))
 })
 
 
-expensesRouter.delete("/",async (req,res) => {
-    const {id} = idParamScehma.parse(req.body)
+expensesRouter.delete("/:id",async (req,res) => {
+    const {id} = idParamScehma.parse(req.params)
     await service.remove(req.user!.id,id)
-    res.status(204)
+    res.status(204).send()
 })

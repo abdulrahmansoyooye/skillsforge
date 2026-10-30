@@ -73,3 +73,13 @@ paths:
         schema: 
          type: array
          item: {$ref: '#/components/schema/Category'}
+  /expenses:
+    get: 
+      responses:
+        '200':
+            desctiption: List of expenses
+            content:
+              application/json: 
+                 schema: 
+                  type: array
+                  

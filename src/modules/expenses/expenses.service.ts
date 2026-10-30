@@ -1,4 +1,4 @@
-import type { lte } from "zod";
+import { promise, type lte } from "zod";
 import { prisma } from "../../config/prisma.js";
 import { HttpError } from "../../utils/httpError.js";
 import * as categories from "../categories/categories.service.js";
@@ -10,21 +10,46 @@ type ExpenseInput = {
   paymentMethod: "CASH" | "CARD" | "TRANSFER" | "OTHER";
   categoryId?: string | null ;
 };
-export async function summary(userId: string) {
+export async function summary(userId: string, month?:string) {
   const where = {
     userId,
+    ...(month && {
+      date:{
+        gte:month,
+        lt:month
+      }
+    })
   };
 
-  const [total, group] = await Promise.all([
+  const [totals, groups] = await Promise.all([
     prisma.expense.aggregate({ where, _sum: { amount: true }, _count: true }),
     prisma.expense.groupBy({
       by: "categoryId",
       where,
       _sum: { amount: true },
       _count: true,
+      orderBy:{
+        _sum:{amount:'desc'}
+      }
     }),
   ]);
-
+   const ids = groups.map((g)=>g.categoryId).filter((id)=> id !== null);
+   const cats = await prisma.category.findMany({
+    where:{userId, id:{in:ids}},
+    select:{id:true,name:true}
+   })
+  const names=new Map(cats.map((c)=>[c.id,c.name]))
+ return{
+  month:month ?? null,
+  totalSpent: totals._sum.amount?.toString() ?? "0",
+  expenseCount:totals._count,
+  byCategory:groups.map((g)=>({
+    categoryId:g.categoryId,
+    categoryName: g.categoryId ? names.get(g.categoryId) : "Uncategorized",
+    total:g._sum.amount?.toString() ?? "0",
+    count:g._count
+  }))
+ }
 
   
 }
@@ -40,7 +65,7 @@ export async function list(userId: string, q: listExpensesQuery) {
       },
     }),
   };
-  const [data, total] = await prisma.$transaction([
+  const [data, total] = await Promise.all([
     prisma.expense.findMany({
       where,
       orderBy: [{ [q.sortBy]: q.order }, { id: "asc" }],

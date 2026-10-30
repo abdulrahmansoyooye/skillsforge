@@ -1,5 +1,7 @@
+import { success } from "zod";
 import { prisma } from "../../config/prisma.js";
 import { HttpError } from "../../utils/httpError.js"
+import { isUniqueViolation } from "../../utils/prismaErrors.js";
 
 export async function list(userId:string){
    return await prisma.category.findMany({
@@ -11,7 +13,6 @@ export async function list(userId:string){
         }
     })
 }
-
 
 export async function getOwned(userId:string,id:string){
    const category = await prisma.category.findFirst({
@@ -29,32 +30,37 @@ export async function getOwned(userId:string,id:string){
 
 export async function create(userId:string,name:string){
    try{
-     return await prisma.category.create({
+       await prisma.category.create({
         data:{
             userId,
             name
         }
     })
-   }catch(e){
-      throw new HttpError(400,"An Error Occured")
+    return {success:true, message:"Category created sucessfully"}
+   }catch(error){
+      console.log(error)
+      if(isUniqueViolation(error) ) throw new HttpError(409,"Category already exist")
+      throw new HttpError(400,"An Error occured")
    }
 }
 
 export async function remove(userId:string,id:string){
    await getOwned(userId,id)
-   return await prisma.category.delete({ where:{id } })
+    await prisma.category.delete({ where:{id } })
+    return {success:true, message:"Category deleted sucessfully"}
+
 }
 
 export async function update(userId:string,id:string,name:string){
-    await getOwned(id,userId)
+    await getOwned(userId,id)
   
-   return await prisma.category.update({
+  const updatedCategroy =  await prisma.category.update({
         where:{
             id,
-            
         },
         data:{
             name
         }
     })
+    return {success:true, message:"Category updated sucessfully", updatedCategroy}
 }
