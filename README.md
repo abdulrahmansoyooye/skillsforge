@@ -37,8 +37,8 @@ Not implemented:
 
 1. Clone and install:
    ```bash
-   git clone <repo-url>
-   cd <folder>
+   git clone https://github.com/abdulrahmansoyooye/skillsforge.git
+   cd api
    npm install
    ```
 2. Copy the environment file and review the values:
@@ -81,9 +81,7 @@ Authorize, and paste it.
 | POST   | /auth/register     | No   | Create an account                    |
 | POST   | /auth/login        | No   | Receive a JWT                        |
 | GET    | /categories        | Yes  | List your categories                 |
-| ...    | ...                | ...  | <fill in the rest>                   |
 
-Query parameters for `GET /expenses`: <list them with defaults and limits>.
 
 ## Project structure
 
@@ -99,7 +97,7 @@ src/
 ## How it works
 
 
-- **Request flow:**For a protected route A request from the router firsts hit a requrieAuth route then it gets validated using parse function provided by zod, then hits the service where the prisma is asynchronously called, A response is returned either with details or error message and the status of the response is returned along .
+- **Request flow:** For a protected route A request from the router firsts hit a requrieAuth route then it gets validated using parse function provided by zod, then hits the service where the prisma is asynchronously called, A response is returned either with details or error message and the status of the response is returned along .
 - **Authentication:** A user registers using his email and password, it gets validated and the password gets hased using bcrypt, the original password is never stored int the databse, only the user id and email is retured when successful. A registered user logs in with  credentials that also gets validated the password with the hashed lookedup user's password, , wrong email or password gets rejected, the user id is tored in the sub and the token is signed using the JWT_SECRET it due to exprie in 1 day returned 
 - -**Data ownership:** Every proteted request must pass through  requireAuth where the user id recieved to look up expense, category  in the databse using, not request body, Every query include the userId, another user's record returns 403(forbidden) instead of 404.
 - **Filtering, sorting and pagination:** Every query request is first validated and  queried in the database using prisma's prebuilt method(skip, take), sortBy and order have predifined values defined in the zod schema and the reponse includes the total query a
@@ -127,6 +125,8 @@ The Space is O(N) because as the array grows the map grows with it, when the pai
 
 ### 2. Two sum, descending list
 Approach: The first and last elements are summed up and checked with the target, when found, it's returned, otherwise the left value is increased to the next element when lesser(than the total target), while the right value is decreased when larger than the target, until the whole array is traversed, when the left is too big, it has already been compared with the smallest corresponding value on the right, so it can't be summed up to the target, it can be discarded and when the right is too small, it has been compared with the corresponding value at the left, so it can be discarded
+
+
 Time: O(N). Space: O(1). The array is traversed through all elements without a loop or comaprism with later ones so the time complexity is O(N), 
 
 Run File 1: `node twoSumsUnSorted.ts`
