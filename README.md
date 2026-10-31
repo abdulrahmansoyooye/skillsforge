@@ -68,7 +68,7 @@ Not implemented:
 ## API documentation
 
 - Swagger UI: http://localhost:4000/api
-- Raw OpenAPI spec: http://localhost:4000/api/openapi.json (can be imported into Postman)
+- Raw OpenAPI spec: http://localhost:4000/api/openapi.json
 - Postman documentation link: https://documenter.getpostman.com/view/32087662/2sBYHXPdA7
 
 To call protected endpoints in Swagger: register, log in, copy the token, click
