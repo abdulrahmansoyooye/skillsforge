@@ -23,10 +23,10 @@ Implemented:
 - Sort by date or amount, ascending or descending
 - Pagination
 - Spending summary (total and per category, optional month filter)
-- <add only what you finish: monthly budgets, export, Docker>
 
 Not implemented:
 - Docker Conternaization
+- Monthly Budget Planning
 
 ## Getting started
 
