@@ -1,26 +1,30 @@
-
-# Logs and databases
-*.log
-*.sqlite
-
-# Dependency directories (Never commit these)
+# Dependencies
 node_modules/
-jspm_packages/
-env/
-venv/
-ENV/
 
-# OS-specific system files
+# Build output
+dist/
+generated/
+*.tsbuildinfo
+coverage/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS files
 .DS_Store
 Thumbs.db
 
-# IDE and Code Editors configs
+# Editors
 .vscode/
 .idea/
-*.suo
-*.ntvs*
 
-# Sensitive data / Secrets (API keys, credentials)
-.env
-.env.local
-config/secure.json
+# Tooling folders created by prisma init (not part of the project)
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
