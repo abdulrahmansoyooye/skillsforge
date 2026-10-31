@@ -130,6 +130,4 @@ Approach: The first and last elements are summed up and checked with the target,
 Time: O(N). Space: O(1). The array is traversed through all elements without a loop or comaprism with later ones so the time complexity is O(N), 
 
 Run File 1: `node twoSumsUnSorted.ts`
-![alt text](image.png)
 Run File 2: `node twoSumsDescending.ts`
-![alt text](image-1.png)
