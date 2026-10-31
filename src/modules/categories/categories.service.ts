@@ -30,13 +30,13 @@ export async function getOwned(userId:string,id:string){
 
 export async function create(userId:string,name:string){
    try{
-       await prisma.category.create({
+     const category =  await prisma.category.create({
         data:{
             userId,
             name
         }
     })
-    return {success:true, message:"Category created sucessfully"}
+    return {success:true, message:"Category created sucessfully",category}
    }catch(error){
       console.log(error)
       if(isUniqueViolation(error) ) throw new HttpError(409,"Category already exist")

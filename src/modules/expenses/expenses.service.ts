@@ -56,7 +56,7 @@ export async function summary(userId: string, month?:string) {
 export async function list(userId: string, q: listExpensesQuery) {
   const where = {
     userId,
-    ...(q.category && { categoryId: q.category }),
+    ...(q.categoryId && { categoryId: q.categoryId }),
     ...(q.paymentMethod && { paymentMethod: q.paymentMethod }),
     ...((q.from || q.to) && {
       date: {

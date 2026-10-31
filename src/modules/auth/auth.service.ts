@@ -20,7 +20,7 @@ export async function login (email:string,password:string){
   const valid = user && await bcrypt.compare(password,user.passwordHash);
  if(!user || !valid) throw new HttpError(401,"Invalid email or password")
    const token = jwt.sign({sub:user.id},process.env.JWT_SECRET!,{expiresIn:'1d'})
-    return {success:true, message:"User loggedin sucessfully", token:{token}};
+    return {token};
 
  
 }

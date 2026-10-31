@@ -12,7 +12,7 @@ export const createExpenseSchema = z.object({
   amount,
   date: z.coerce.date(),
   paymentMethod: z.enum(paymentMethods),
-  catergoryId: z.string().uuid().nullable().optional(),
+  categoryId: z.string().uuid().nullable().optional(),
 });
 
 export const listExpensesSchema = z.object({
@@ -23,7 +23,7 @@ export const listExpensesSchema = z.object({
   page:z.coerce.number().int().min(1).default(1),
   limit:z.coerce.number().int().min(1).max(100).default(100),
   paymentMethod: z.enum(paymentMethods).optional(),
-  category: z.string().uuid().optional(),
+  categoryId: z.string().uuid().optional(),
 })
 .refine((q)=>!q.from || !q.to || q.from <= q.to,{
     message:'"from" must not be after "to"',
